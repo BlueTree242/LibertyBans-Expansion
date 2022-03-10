@@ -53,7 +53,7 @@ public class LibertybansExpansion extends PlaceholderExpansion {
     public boolean register() {
         if (!canRegister()) return false;
         Omnibus omnibus = OmnibusProvider.getOmnibus();
-        LibertyBans libertyBans = omnibus.getRegistry().getProvider(LibertyBans.class).orElseThrow();
+        libertyBans = omnibus.getRegistry().getProvider(LibertyBans.class).orElseThrow();
         return super.register();
     }
 
