@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id("com.github.monosoul.yadegrap") version "1.0.0"
+}
+compileJava.options.encoding 'UTF-8'
+targetCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_11
+build.finalizedBy shadowJar
+group 'me.bluetree242'
+version '1.0'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+
+        // As of Gradle 5.1, you can limit this to only those
+        // dependencies you expect from it
+        content {
+            includeGroup 'org.bukkit'
+            includeGroup 'org.spigotmc'
+        }
+    }
+    maven {
+        name= 'arim-mvn-agpl3'
+        url = 'https://mvn-repo.arim.space/affero-gpl3/'
+    }
+}
+dependencies {
+    compileOnly 'me.clip:placeholderapi:2.11.1'
+    compileOnly "org.jetbrains:annotations:22.0.0"
+    compileOnly 'org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT'
+    implementation 'com.github.ben-manes.caffeine:caffeine:2.9.0'
+    compileOnly "space.arim.libertybans:bans-api:1.0.1"
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+}
+
+shadowJar {
+    classifier ''
+    relocate 'com.github.benmanes.caffeine', 'tk.bluetree242.discordsrvutils.dependencies.caffeine'
+}
