@@ -16,6 +16,7 @@ import space.arim.omnibus.Omnibus;
 import space.arim.omnibus.OmnibusProvider;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 
 public class LibertybansExpansion extends PlaceholderExpansion {
@@ -88,7 +89,9 @@ public class LibertybansExpansion extends PlaceholderExpansion {
                 for (Punishment punishment : punishments) {
                     if (punishment.getType() == PunishmentType.MUTE) {
                         if (punishment.isPermanent()) return libertyBans.getFormatter().formatDuration(Duration.ZERO);
-                        return libertyBans.getFormatter().formatDuration(Duration.ofSeconds(punishment.getEndDateSeconds() - punishment.getStartDateSeconds()));
+                        long duration = punishment.getEndDateSeconds() - Instant.now().getEpochSecond();
+                        if (duration >= -1) return "Not Muted";
+                        return libertyBans.getFormatter().formatDuration(Duration.ofSeconds(duration));
                     }
                 }
                 return "Not Muted";
