@@ -29,6 +29,34 @@ public class LibertybansExpansion extends PlaceholderExpansion {
                 cache.load();
                 return cache;
             });
+    
+    public String handleRequest(UUID uuid, @NotNull String identifier) {
+        PlayerCache cache = this.cache.get(uuid);
+        if (cache == null) return null;
+        List<Punishment> punishments = cache.getPunishments();
+        switch (identifier.toLowerCase(Locale.ROOT)) {
+            case "is_banned":
+                return bool(cache.isBanned());
+            case "is_muted":
+                return bool(cache.isMuted());
+            case "mute_reason":
+                for (Punishment punishment : punishments) {
+                    if (punishment.getType() == PunishmentType.MUTE) {
+                        return punishment.getReason();
+                    }
+                }
+                return "Not Muted";
+            case "mute_duration":
+                for (Punishment punishment : punishments) {
+                    if (punishment.getType() == PunishmentType.MUTE) {
+                        if (punishment.isPermanent()) return libertyBans.getFormatter().formatDuration(Duration.ZERO);
+                        return libertyBans.getFormatter().formatDuration(Duration.ofSeconds(punishment.getEndDateSeconds() - punishment.getStartDateSeconds()));
+                    }
+                }
+                return "Not Muted";
+        }
+        return null;
+    }
 
     @Override
     public @NotNull String getIdentifier() {
@@ -66,34 +94,6 @@ public class LibertybansExpansion extends PlaceholderExpansion {
     public String onPlaceholderRequest(final Player player, @NotNull final String identifier) {
         if (player == null) return null;
         return handleRequest(player.getUniqueId(), identifier);
-    }
-
-    public String handleRequest(UUID uuid, @NotNull String identifier) {
-        PlayerCache cache = this.cache.get(uuid);
-        if (cache == null) return null;
-        List<Punishment> punishments = cache.getPunishments();
-        switch (identifier.toLowerCase(Locale.ROOT)) {
-            case "is_banned":
-                return bool(cache.isBanned());
-            case "is_muted":
-                return bool(cache.isMuted());
-            case "mute_reason":
-                for (Punishment punishment : punishments) {
-                    if (punishment.getType() == PunishmentType.MUTE) {
-                        return punishment.getReason();
-                    }
-                }
-                return "Not Muted";
-            case "mute_duration":
-                for (Punishment punishment : punishments) {
-                    if (punishment.getType() == PunishmentType.MUTE) {
-                        if (punishment.isPermanent()) return libertyBans.getFormatter().formatDuration(Duration.ZERO);
-                        return libertyBans.getFormatter().formatDuration(Duration.ofSeconds(punishment.getEndDateSeconds() - punishment.getStartDateSeconds()));
-                    }
-                }
-                return "Not Muted";
-        }
-        return null;
     }
 
     private String bool(boolean b) {
