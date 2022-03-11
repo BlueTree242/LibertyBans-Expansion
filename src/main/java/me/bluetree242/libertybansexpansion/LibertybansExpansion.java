@@ -51,7 +51,7 @@ public class LibertybansExpansion extends PlaceholderExpansion {
                     if (punishment.getType() == PunishmentType.MUTE) {
                         if (punishment.isPermanent()) return libertyBans.getFormatter().formatDuration(Duration.ZERO);
                         long duration = punishment.getEndDateSeconds() - Instant.now().getEpochSecond();
-                        if (duration >= -1) return "Not Muted";
+                        if (duration <= -1) return "Not Muted";
                         return libertyBans.getFormatter().formatDuration(Duration.ofSeconds(duration));
                     }
                 }
