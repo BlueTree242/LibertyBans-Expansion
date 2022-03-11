@@ -20,9 +20,9 @@ public class PlayerCache {
     private boolean muted = false;
     @Getter
     private boolean banned = false;
-
+    @Getter private List<Punishment> punishments;
     protected void load() throws ExecutionException, InterruptedException {
-        List<Punishment> punishments = libertyBans.getSelector()
+        punishments = libertyBans.getSelector()
                 .selectionBuilder()
                 .selectActiveOnly(true)
                 .victim(PlayerVictim.of(uuid)).build().getAllSpecificPunishments().toCompletableFuture().get();

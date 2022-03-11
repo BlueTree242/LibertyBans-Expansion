@@ -10,14 +10,13 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import space.arim.libertybans.api.LibertyBans;
+import space.arim.libertybans.api.PunishmentType;
+import space.arim.libertybans.api.punish.Punishment;
 import space.arim.omnibus.Omnibus;
 import space.arim.omnibus.OmnibusProvider;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class LibertybansExpansion extends PlaceholderExpansion {
     private LibertyBans libertyBans;
@@ -72,11 +71,27 @@ public class LibertybansExpansion extends PlaceholderExpansion {
     public String handleRequest(UUID uuid, @NotNull String identifier) {
         PlayerCache cache = this.cache.get(uuid);
         if (cache == null) return null;
+        List<Punishment> punishments = cache.getPunishments();
         switch (identifier.toLowerCase(Locale.ROOT)) {
             case "is_banned":
                 return bool(cache.isBanned());
             case "is_muted":
                 return bool(cache.isMuted());
+            case "mute_reason":
+                for (Punishment punishment : punishments) {
+                    if (punishment.getType() == PunishmentType.MUTE) {
+                        return punishment.getReason();
+                    }
+                }
+                return "Not Muted";
+            case "mute_duration":
+                for (Punishment punishment : punishments) {
+                    if (punishment.getType() == PunishmentType.MUTE) {
+                        if (punishment.isPermanent()) return libertyBans.getFormatter().formatDuration(Duration.ZERO);
+                        return libertyBans.getFormatter().formatDuration(Duration.ofSeconds(punishment.getEndDateSeconds() - punishment.getStartDateSeconds()));
+                    }
+                }
+                return "Not Muted";
         }
         return null;
     }
