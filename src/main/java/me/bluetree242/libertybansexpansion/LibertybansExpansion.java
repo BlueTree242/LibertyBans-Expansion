@@ -102,19 +102,4 @@ public class LibertybansExpansion extends PlaceholderExpansion {
         return b ? PlaceholderAPIPlugin.booleanTrue() : PlaceholderAPIPlugin.booleanFalse();
     }
 
-
-    private static class Placeholder {
-        public final UUID uuid;
-        public final String[] params;
-
-        public Placeholder(UUID uuid, String[] params) {
-            this.uuid = uuid;
-            this.params = params;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(uuid, Arrays.hashCode(params));
-        }
-    }
 }
