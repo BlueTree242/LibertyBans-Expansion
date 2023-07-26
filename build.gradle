@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id("com.github.monosoul.yadegrap") version "1.0.0"
 }
 compileJava.options.encoding 'UTF-8'
@@ -27,6 +27,14 @@ repositories {
         }
     }
     maven {
+        name= 'arim-mvn-lgpl3'
+        url = 'https://mvn-repo.arim.space/lesser-gpl3/'
+    }
+    maven {
+        name= 'arim-mvn-gpl3'
+        url = 'https://mvn-repo.arim.space/gpl3/'
+    }
+    maven {
         name= 'arim-mvn-agpl3'
         url = 'https://mvn-repo.arim.space/affero-gpl3/'
     }
@@ -34,14 +42,14 @@ repositories {
 dependencies {
     compileOnly 'me.clip:placeholderapi:2.11.1'
     compileOnly "org.jetbrains:annotations:22.0.0"
-    compileOnly 'org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT'
     implementation 'com.github.ben-manes.caffeine:caffeine:2.9.0'
-    compileOnly "space.arim.libertybans:bans-api:1.0.1"
+    compileOnly "space.arim.libertybans:bans-api:1.1.0-M3"
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
 shadowJar {
-    classifier ''
+    archiveClassifier.set('')
     relocate 'com.github.benmanes.caffeine', 'tk.bluetree242.discordsrvutils.dependencies.caffeine'
 }
